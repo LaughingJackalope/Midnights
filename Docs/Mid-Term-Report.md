@@ -20,7 +20,7 @@ Operation Midnight is progressing well. Code and documentation deliveries satisf
 
 #### Documentation Deliveries
 * Project Proposal: Output of SDLC Phase 3.[^2] This document contains the requirements and deliverables of Operation: Midnight 
-* Mid-term Report: This document contains a report on requirements satisfied, progress plan and refined deliverables. 
+* Mid-term Report: This document contains a report on requirements satisfied, remaining and emerging. 
 
 #### Functional Requirements satisfied
 * Initial setup requirements satisfied on arrival as I already had an AWS account with an SSH key registered in EC2 and the required software on my machine. Planning requirements satisfied by Project proposal document used as reference for project planning in JetBrains Space. 
@@ -40,17 +40,17 @@ Operation Midnight is progressing well. Code and documentation deliveries satisf
     * Project scope was initially minimized to lower delivery risk, but there is some room in the resourcing to satisfy emerging requirements and address this particular feedback. 
 
 #### Functional Requirements Emerging
-* EKS is moving from nice-to-have to a soft requirement because of the golden paths through kubernetes provided by Zabbix and AWX.
+* EKS is moving from nice-to-have to a hard requirement because of the golden paths through kubernetes provided by Zabbix and AWX.
   * This is a complication, but it drives value to the bottom line (the demo)
-  * Some design cycles required to derive network design for EKS cluster with respect to demo VPC
-  * A new planning and design cycle will be required to reduce risk. 
-  * EKS deployment can be greatly simplified with eksctl[^5]
+  * Some design cycles required to correctly couple eks and ec2 infrastructure components.
   * The path without kubernetes feature enhancement contains more undifferentiated heavy lifting and unmanaged risk than this path.
-  * Feature enhancement should be documented separately from this mid-term report. 
+  * Feature enhancement should be documented separately from this mid-term report.
+
+### Conclusion
+Operation Midnight is progressing according to plan, with significant achievements in foundational requirements and minimal technical debt. While some complex functional requirements remain, the project is well-positioned to meet its final objectives within the projected timeframe. The emerging need to integrate EKS reflects the project’s adaptability and commitment to delivering a robust, scalable, and efficient cloud infrastructure. As we move forward, the focus will be on completing the remaining tasks and incorporating valuable feedback to ensure a comprehensive and polished final presentation. The groundwork laid thus far provides a strong foundation for the successful completion of Operation Midnight.
 
 
 [^1]  https://www.darpa.mil/work-with-us/heilmeier-catechism
 [^2]  https://www.justice.gov/archive/jmd/irm/lifecycle/ch3.htm
 [^3]  [Networking CloudFormation Template](CloudFormation/vpc.yaml) 
 [^4]  [Compute CloudFormation Template](CloudFormation/compute.yaml)
-[^5]  https://github.com/eksctl-io/eksctl
