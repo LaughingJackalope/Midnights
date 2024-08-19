@@ -15,7 +15,7 @@ Operation Midnight is progressing well. Code and documentation deliveries satisf
 
 #### Code Deliveries
 * Cloudformation templates sufficient to deploy a VPC with a public subnet and a private subnet, and one test EC2 instance per subnet, as a design feature the test instances are also added to SSM which provides a promising integration path for the dynamic inventory requirements of Ansible AWX.
-* Ansible playbooks sufficient to provision the deployed instances from my local machine. One playbook generates an inventory file with the appropriate ssh commands for tunneling into the private instance, and another runs from some simple plays against the generated inventory to demonstrate functionality. 
+* Ansible playbooks sufficient to provision the deployed instances from my local machine. One playbook generates an inventory file with the appropriate ssh commands for tunneling into the private instance, and another runs some simple plays against the generated inventory to demonstrate functionality. 
 * Makefiles sufficient to automate the testing of this system under development and to document the operational workflow. 
 
 #### Documentation Deliveries
