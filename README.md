@@ -11,9 +11,13 @@ This is a simple demonstration of DevOps automation using CloudFormation, Ansibl
 
 ## Usage
 The automation path I'm using is as follows:
+
+```bash
 make deploy_all 
-- This will create the CloudFormation stack, and then run the Ansible playbook to configure the EC2 instances.
-  -    The success of this on the first shot will depend on some factors outside the scope of this demonstration. 
+```
+
+This will create the CloudFormation stack, and then run the Ansible playbook to configure the EC2 instances.
+
 
 ## Failure conditions and resolutions
 - If the CloudFormation stack fails to create, you will need to delete the stack and try again.
