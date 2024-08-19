@@ -1,0 +1,110 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Midnight Compute: Phase 3 testing"
+Resources:
+
+  # Security Groups
+  PublicInstanceSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Allow SSH and HTTP access from anywhere"
+      VpcId: !ImportValue VPCId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: "0.0.0.0/0" # SSH from anywhere
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: "0.0.0.0/0" # Allow all outbound traffic
+
+  PrivateInstanceSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Allow SSH access from public instance only"
+      VpcId: !ImportValue VPCId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          SourceSecurityGroupId: !Ref PublicInstanceSecurityGroup # Allow SSH only from public instance
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: "0.0.0.0/0" # Allow all outbound traffic
+
+  # Instance roles for SSM
+  SSMInstanceRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+
+  SSMInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - !Ref SSMInstanceRole
+      InstanceProfileName: "PublicInstanceProfile"
+
+  # EC2 Instances
+  PublicInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      IamInstanceProfile: !Ref SSMInstanceProfile
+      InstanceType: "t2.micro"
+      ImageId: "ami-0253ce2428bbcb004" # Rocky-9-EC2-Base-9.4-20240509.0.x86_64
+      SubnetId: !ImportValue PublicSubnetId
+      SecurityGroupIds:
+        - !Ref PublicInstanceSecurityGroup
+      KeyName: "goldman" # Replace with your key pair name
+      UserData:
+        Fn::Base64:
+          !Sub |
+          #!/bin/bash
+          # Install the latest version of the SSM Agent
+          dnf install -y https://s3.us-east-2.amazonaws.com/amazon-ssm-us-east-2/latest/linux_amd64/amazon-ssm-agent.rpm
+      Tags:
+        - Key: "Project"
+          Value: "Midnight"
+        - Key: "Network"
+          Value: "public"
+
+
+  PrivateInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      IamInstanceProfile: !Ref SSMInstanceProfile
+      InstanceType: "t2.micro"
+      ImageId: "ami-0253ce2428bbcb004" # Rocky-9-EC2-Base-9.4-20240509.0.x86_64
+      SubnetId: !ImportValue PrivateSubnetId
+      SecurityGroupIds:
+        - !Ref PrivateInstanceSecurityGroup
+      KeyName: "goldman" # Replace with your key pair name
+      UserData:
+        Fn::Base64:
+          !Sub |
+          #!/bin/bash
+          # Install the latest version of the SSM Agent
+          dnf install -y https://s3.us-east-2.amazonaws.com/amazon-ssm-us-east-2/latest/linux_amd64/amazon-ssm-agent.rpm
+      Tags:
+        - Key: "Project"
+          Value: "Midnight"
+        - Key: "Netowrk"
+          Value: "Private"
+
+Outputs:
+  PublicInstanceIPAddress:
+    Description: "Public Instance IP Address"
+    Value: !GetAtt PublicInstance.PublicIp
+
+  PrivateInstancePrivateIP:
+    Description: "Private Instance Private IP Address"
+    Value: !GetAtt PrivateInstance.PrivateIp

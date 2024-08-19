@@ -1,0 +1,49 @@
+- name: Extract specific information from CloudFormation stack
+  hosts: localhost
+  vars:
+    ansible_user: rocky
+  tasks:
+    - name: Gather CloudFormation stack information
+      amazon.aws.cloudformation_info:
+        stack_name: "compute"
+        stack_resources: true
+      register: outputx
+
+    - name: Get Ip Address of Public Instance
+      set_fact:
+        public_ip: "{{ outputx['cloudformation']['compute']['stack_outputs']['PublicInstanceIPAddress'] }}"
+
+    - name: Put Public IP into Inventory
+      add_host:
+        hostname: "{{ public_ip }}"
+        groups: public
+
+    - name: Get Ip Address of Private Instance
+      set_fact:
+        private_ip: "{{ outputx['cloudformation']['compute']['stack_outputs']['PrivateInstancePrivateIP'] }}"
+
+    - name: Put Private IP into Inventory
+      add_host:
+        hostname: "{{ private_ip }}"
+        groups: private
+
+    - name: Write inventory to file
+      copy:
+        content: |
+          [public]
+          {% for host in groups['public'] %}
+          {{ host }} ansible_user={{ ansible_user }}
+          {% endfor %}
+
+          [private]
+          {% for host in groups['private'] %}
+          {{ host }} ansible_user={{ ansible_user }}
+          {% endfor %}
+
+          [public:vars]
+          ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ForwardAgent=yes -o UserKnownHostsFile=/dev/null'
+
+          [private:vars]
+          ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ForwardAgent=yes -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -A -W %h:%p -q {{ ansible_user }}@{{ public_ip }}"'
+        dest: ./inventory.txt
+

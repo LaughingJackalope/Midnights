@@ -1,0 +1,43 @@
+- hosts: public  # Target only the 'public' group (jump host)
+  become: yes
+  tasks:
+    - name: install httpd on public instance
+      dnf:
+        name: 'httpd'
+        state: present
+    - name: Start httpd service
+      service:
+          name: httpd
+          state: started
+          enabled: yes
+
+- hosts: private  # Target the 'private' group
+  become: yes
+  tasks:
+    - name: Install PostgreSQL on private instance
+      dnf:
+        name: 'postgresql-server'
+        state: present
+    - name: Install PostgreSQL client
+      dnf:
+        name: 'postgresql'
+        state: present
+
+    - name: Check if PostgreSQL is initialized
+      stat:
+        path: /var/lib/pgsql/data/pg_hba.conf
+      register: pg_init_check
+
+    - name: Initialize PostgreSQL database
+      command:
+        cmd: postgresql-setup --initdb
+      when: not pg_init_check.stat.exists
+
+    - name: Start PostgreSQL service
+      service:
+          name: postgresql
+          state: started
+          enabled: yes
+
+
+

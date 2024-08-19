@@ -1,0 +1,11 @@
+[public]
+54.176.16.181 ansible_user=rocky
+
+[private]
+10.0.2.241 ansible_user=rocky
+
+[public:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ForwardAgent=yes -o UserKnownHostsFile=/dev/null'
+
+[private:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ForwardAgent=yes -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -A -W %h:%p -q rocky@54.176.16.181"'

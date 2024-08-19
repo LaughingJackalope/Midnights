@@ -1,0 +1,24 @@
+- hosts: public  # Target only the 'public' group (jump host)
+  become: yes
+  tasks:
+
+    - name: Debug ansible_ssh_common_args for public instances
+      debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_ssh_common_args }}"
+      when: "'public' in group_names"
+
+    - name: ping public instance
+      ping:
+
+
+
+- hosts: private  # Target the 'private' group
+  tasks:
+    - name: Debug ansible_ssh_common_args for private instances
+      debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_ssh_common_args }}"
+      when: "'private' in group_names"
+
+    - name: ping private instance
+      ping:
+
