@@ -1,11 +1,11 @@
-# **Project Proposal: Project Midnight**
+# **Project Proposal: Operation Midnight**
 
 ---
 
-## **Project Title**: Project Midnight
+## **Project Title**: Operation Midnight
 
 ## **Project Summary**
-Project Midnight aims to design and implement a scalable, automated, and monitored cloud infrastructure using AWS services and modern DevOps tools. The project will demonstrate the integration of AWS EC2 Auto Scaling, CloudFormation, VPC, Rocky Linux, Ansible, Ansible AWX, and Zabbix. This infrastructure will automatically adjust to changes in demand and ensure continuous monitoring and configuration management.
+Operation Midnight aims to design and implement a scalable, automated, and monitored cloud infrastructure using AWS services and modern DevOps tools. The project will demonstrate the integration of AWS EC2 Auto Scaling, CloudFormation, VPC, Rocky Linux, Ansible, Ansible AWX, and Zabbix. This infrastructure will automatically adjust to changes in demand and ensure continuous monitoring and configuration management.
 
 ## **Project Objectives**
 1. **Automate Infrastructure Deployment**: Use AWS CloudFormation to create a VPC, deploy EC2 instances running Rocky Linux, and implement Auto Scaling to dynamically adjust the number of instances based on load.
@@ -119,4 +119,4 @@ YOU AER HERE
   - **Mitigation**: Incremental testing and use of version control for all scripts and configurations.
 
 ## **Conclusion**
-Project Midnight will showcase the ability to create a fully automated, scalable, and monitored cloud infrastructure using industry-standard tools. The successful completion of this project will demonstrate proficiency in AWS, DevOps automation, and infrastructure monitoring, positioning the team to manage complex cloud environments efficiently.
+Operation Midnight will showcase the ability to create a fully automated, scalable, and monitored cloud infrastructure using industry-standard tools. The successful completion of this project will demonstrate proficiency in AWS, DevOps automation, and infrastructure monitoring, positioning the team to manage complex cloud environments efficiently.
