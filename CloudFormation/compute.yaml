@@ -64,7 +64,7 @@ Resources:
       SubnetId: !ImportValue PublicSubnetId
       SecurityGroupIds:
         - !Ref PublicInstanceSecurityGroup
-      KeyName: "goldman" # Replace with your key pair name
+      KeyName: "magic" # Replace with your key pair name
       UserData:
         Fn::Base64:
           !Sub |
@@ -87,7 +87,7 @@ Resources:
       SubnetId: !ImportValue PrivateSubnetId
       SecurityGroupIds:
         - !Ref PrivateInstanceSecurityGroup
-      KeyName: "goldman" # Replace with your key pair name
+      KeyName: "magic" # Replace with your key pair name
       UserData:
         Fn::Base64:
           !Sub |
@@ -97,7 +97,7 @@ Resources:
       Tags:
         - Key: "Project"
           Value: "Midnight"
-        - Key: "Netowrk"
+        - Key: "Network"
           Value: "Private"
 
 Outputs:
